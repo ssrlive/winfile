@@ -51,7 +51,7 @@ LPXDTALINK StealDTABlock(HWND hwndCur, LPWSTR pPath, DWORD dwAttribs);
 BOOL IsNetDir(LPWSTR pPath, LPWSTR pName);
 VOID DirReadAbort(HWND hwnd, LPXDTALINK lpStart, EDIRABORT eDirAbort);
 DWORD DecodeReparsePoint(LPCWSTR szMyFile, LPCWSTR szChild, LPWSTR szDest, DWORD cwcDest);
-LONG WFRegGetValueW(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue, LPDWORD pdwType, PVOID pvData, LPDWORD pcbData);
+LONG WFRegGetValueW(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue, DWORD dwFlags, LPDWORD pdwType, PVOID pvData, LPDWORD pcbData);
 
 BOOL
 InitDirRead(VOID)
@@ -540,21 +540,21 @@ BuildDocumentStringWorker()
 
 		 cbClass = sizeof(szClass);
 		 cbIconFile = 0;
-		 if (WFRegGetValueW(hk, szT, NULL, NULL, szClass, &cbClass) == ERROR_SUCCESS)
+		 if (WFRegGetValueW(hk, szT, NULL, NULL, 0, szClass, &cbClass) == ERROR_SUCCESS)
 		 {
 		    DWORD cbClass2;
 			TCHAR szClass2[MAXPATHLEN];
 
 			cbClass2 = sizeof(szClass2);
 			lstrcat(szClass, L"\\CurVer");
-			if (WFRegGetValueW(hk, szClass, NULL, NULL, szClass2, &cbClass2) == ERROR_SUCCESS)
+			if (WFRegGetValueW(hk, szClass, NULL, NULL, 0, szClass2, &cbClass2) == ERROR_SUCCESS)
 				lstrcpy(szClass, szClass2);
 			else
 				szClass[lstrlen(szClass)-7] = '\0';
 
 			cbIconFile = sizeof(szIconFile);
 			lstrcat(szClass, L"\\DefaultIcon");
-			if (WFRegGetValueW(hk, szClass, NULL, NULL, szIconFile, &cbIconFile) != ERROR_SUCCESS)
+			if (WFRegGetValueW(hk, szClass, NULL, NULL, 0, szIconFile, &cbIconFile) != ERROR_SUCCESS)
 				cbIconFile = 0;
 		 }
 
@@ -1273,14 +1273,14 @@ DWORD DecodeReparsePoint(LPCWSTR szMyFile, LPCWSTR szChild, LPWSTR szDest, DWORD
 }
 
 // RegGetValue isn't available on Windows XP
-LONG WFRegGetValueW(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue, LPDWORD pdwType, PVOID pvData, LPDWORD pcbData)
+LONG WFRegGetValueW(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue, DWORD dwFlags, LPDWORD pdwType, PVOID pvData, LPDWORD pcbData)
 {
 	DWORD dwStatus;
 	HKEY hkeySub;
 
 	if ((dwStatus = RegOpenKey(hkey, lpSubKey, &hkeySub)) == ERROR_SUCCESS)
 	{
-			dwStatus = RegQueryValueEx(hkeySub, lpValue, NULL, pdwType, pvData, pcbData);
+			dwStatus = RegQueryValueEx(hkeySub, lpValue, NULL, pdwType, (LPBYTE)pvData, pcbData);
 
 			RegCloseKey(hkeySub);
 	}
