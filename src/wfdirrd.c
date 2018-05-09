@@ -540,21 +540,21 @@ BuildDocumentStringWorker()
 
 		 cbClass = sizeof(szClass);
 		 cbIconFile = 0;
-		 if (WFRegGetValueW(hk, szT, NULL, NULL, 0, szClass, &cbClass) == ERROR_SUCCESS)
+		 if (WFRegGetValueW(hk, szT, NULL, 0, NULL, szClass, &cbClass) == ERROR_SUCCESS)
 		 {
 		    DWORD cbClass2;
 			TCHAR szClass2[MAXPATHLEN];
 
 			cbClass2 = sizeof(szClass2);
 			lstrcat(szClass, L"\\CurVer");
-			if (WFRegGetValueW(hk, szClass, NULL, NULL, 0, szClass2, &cbClass2) == ERROR_SUCCESS)
+			if (WFRegGetValueW(hk, szClass, NULL, 0, NULL, szClass2, &cbClass2) == ERROR_SUCCESS)
 				lstrcpy(szClass, szClass2);
 			else
 				szClass[lstrlen(szClass)-7] = '\0';
 
 			cbIconFile = sizeof(szIconFile);
 			lstrcat(szClass, L"\\DefaultIcon");
-			if (WFRegGetValueW(hk, szClass, NULL, NULL, 0, szIconFile, &cbIconFile) != ERROR_SUCCESS)
+			if (WFRegGetValueW(hk, szClass, NULL, 0, NULL, szIconFile, &cbIconFile) != ERROR_SUCCESS)
 				cbIconFile = 0;
 		 }
 
