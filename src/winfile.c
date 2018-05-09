@@ -46,13 +46,21 @@ sGetLocaleInfoEx pGetLocaleInfoEx = NULL;
 sWow64DisableWow64FsRedirection pWow64DisableWow64FsRedirection = NULL;
 sWow64RevertWow64FsRedirection pWow64RevertWow64FsRedirection = NULL;
 
+sRegGetValueW pRegGetValueW = NULL;
+
 void init_proc_pointers(void) {
-    HMODULE hKernel = GetModuleHandle(TEXT("kernel32.dll"));
-    pLocaleNameToLCID = (sLocaleNameToLCID)GetProcAddress(hKernel, "LocaleNameToLCID");
-    pGetLocaleInfoW = (sGetLocaleInfoW)GetProcAddress(hKernel, "GetLocaleInfoW");
-    pGetLocaleInfoEx = (sGetLocaleInfoEx)GetProcAddress(hKernel, "GetLocaleInfoEx");
-    pWow64DisableWow64FsRedirection = (sWow64DisableWow64FsRedirection)GetProcAddress(hKernel, "Wow64DisableWow64FsRedirection");
-    pWow64RevertWow64FsRedirection = (sWow64RevertWow64FsRedirection)GetProcAddress(hKernel, "Wow64RevertWow64FsRedirection");
+    {
+        HMODULE hKernel = GetModuleHandle(TEXT("kernel32.dll"));
+        pLocaleNameToLCID = (sLocaleNameToLCID)GetProcAddress(hKernel, "LocaleNameToLCID");
+        pGetLocaleInfoW = (sGetLocaleInfoW)GetProcAddress(hKernel, "GetLocaleInfoW");
+        pGetLocaleInfoEx = (sGetLocaleInfoEx)GetProcAddress(hKernel, "GetLocaleInfoEx");
+        pWow64DisableWow64FsRedirection = (sWow64DisableWow64FsRedirection)GetProcAddress(hKernel, "Wow64DisableWow64FsRedirection");
+        pWow64RevertWow64FsRedirection = (sWow64RevertWow64FsRedirection)GetProcAddress(hKernel, "Wow64RevertWow64FsRedirection");
+    }
+    {
+        HMODULE hAdvapi32 = GetModuleHandle(TEXT("Advapi32.dll"));
+        pRegGetValueW = (sRegGetValueW)GetProcAddress(hAdvapi32, "RegGetValueW");
+    }
 }
 
 INT APIENTRY

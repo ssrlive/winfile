@@ -62,6 +62,10 @@ extern sWow64DisableWow64FsRedirection pWow64DisableWow64FsRedirection;
 typedef BOOL (__stdcall *sWow64RevertWow64FsRedirection)(PVOID OlValue);
 extern sWow64RevertWow64FsRedirection pWow64RevertWow64FsRedirection;
 
+typedef LSTATUS (__stdcall *sRegGetValueW)(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue,
+    DWORD dwFlags, LPDWORD pdwType, PVOID pvData, LPDWORD pcbData);
+extern sRegGetValueW pRegGetValueW;
+
 #define STKCHK()
 
 #ifdef UNICODE

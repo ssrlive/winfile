@@ -1277,7 +1277,7 @@ LONG WFRegGetValueW(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue, DWORD dwFlags,
 {
 	DWORD dwStatus;
 	HKEY hkeySub;
-
+    if (pRegGetValueW) { return pRegGetValueW(hkey, lpSubKey, lpValue, dwFlags, pdwType, pvData, pcbData); }
 	if ((dwStatus = RegOpenKey(hkey, lpSubKey, &hkeySub)) == ERROR_SUCCESS)
 	{
 			dwStatus = RegQueryValueEx(hkeySub, lpValue, NULL, pdwType, (LPBYTE)pvData, pcbData);
