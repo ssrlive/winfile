@@ -45,6 +45,23 @@
 // Japan markers:
 //
 
+LONG WFRegGetValueW(HKEY hkey, LPCWSTR lpSubKey, LPCWSTR lpValue, DWORD dwFlags, LPDWORD pdwType, PVOID pvData, LPDWORD pcbData);
+
+typedef LCID (__stdcall *sLocaleNameToLCID)(LPCWSTR lpName, DWORD dwFlags);
+extern sLocaleNameToLCID pLocaleNameToLCID;
+
+typedef int (__stdcall *sGetLocaleInfoW)(LCID Locale, LCTYPE LCType, LPWSTR lpLCData, int cchData);
+extern sGetLocaleInfoW pGetLocaleInfoW;
+
+typedef int (__stdcall *sGetLocaleInfoEx)(LPCWSTR lpLocaleName, LCTYPE LCType, LPWSTR lpLCData, int cchData);
+extern sGetLocaleInfoEx pGetLocaleInfoEx;
+
+typedef BOOL (__stdcall *sWow64DisableWow64FsRedirection)(PVOID *OldValue);
+extern sWow64DisableWow64FsRedirection pWow64DisableWow64FsRedirection;
+
+typedef BOOL (__stdcall *sWow64RevertWow64FsRedirection)(PVOID OlValue);
+extern sWow64RevertWow64FsRedirection pWow64RevertWow64FsRedirection;
+
 #define STKCHK()
 
 #ifdef UNICODE

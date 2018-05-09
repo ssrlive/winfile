@@ -283,8 +283,8 @@ GetSettings()
 VOID
 GetInternational()
 {
-   GetLocaleInfoW(lcid, LOCALE_STHOUSAND, (LPWSTR) szComma, COUNTOF(szComma));
-   GetLocaleInfoW(lcid, LOCALE_SDECIMAL, (LPWSTR) szDecimal, COUNTOF(szDecimal));
+    if (pGetLocaleInfoW) { pGetLocaleInfoW(lcid, LOCALE_STHOUSAND, (LPWSTR) szComma, COUNTOF(szComma)); }
+    if (pGetLocaleInfoW) { pGetLocaleInfoW(lcid, LOCALE_SDECIMAL, (LPWSTR) szDecimal, COUNTOF(szDecimal)); }
 }
 
 
@@ -962,7 +962,7 @@ InitFileManager(
    GetPrivateProfileString(szSettings, szUILanguage, szNULL, szTemp, COUNTOF(szTemp), szTheINIFile);
    if (szTemp[0])
    {
-       LCID lcidUI = LocaleNameToLCID(szTemp, 0);
+       LCID lcidUI = pLocaleNameToLCID ? pLocaleNameToLCID(szTemp, 0) : 0;
        if (lcidUI != 0)
        {
            SetThreadUILanguage((LANGID)lcidUI);

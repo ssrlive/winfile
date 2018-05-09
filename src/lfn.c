@@ -44,7 +44,7 @@ WFFindFirst(
    //
 
    PVOID oldValue;
-   Wow64DisableWow64FsRedirection(&oldValue);
+   if (pWow64DisableWow64FsRedirection) { pWow64DisableWow64FsRedirection(&oldValue); }
 
    if ((dwAttrFilter & ~(ATTR_DIR | ATTR_HS)) == 0)
    {
@@ -69,7 +69,7 @@ WFFindFirst(
 
    lpFind->fd.dwFileAttributes &= ATTR_USED;
 
-   Wow64RevertWow64FsRedirection(oldValue);
+   if (pWow64RevertWow64FsRedirection) { pWow64RevertWow64FsRedirection(oldValue); }
 
    //
    // Keep track of length
@@ -110,7 +110,7 @@ BOOL
 WFFindNext(LPLFNDTA lpFind)
 {
 	PVOID oldValue;
-	Wow64DisableWow64FsRedirection(&oldValue);
+    if (pWow64DisableWow64FsRedirection) { pWow64DisableWow64FsRedirection(&oldValue); }
 	
    while (FindNextFile(lpFind->hFindFile, &lpFind->fd)) {
 
@@ -139,14 +139,14 @@ WFFindNext(LPLFNDTA lpFind)
          lstrcpy(lpFind->fd.cFileName, lpFind->fd.cAlternateFileName);
       }
 
-	  Wow64RevertWow64FsRedirection(oldValue);
+      if (pWow64RevertWow64FsRedirection) { pWow64RevertWow64FsRedirection(oldValue); }
       lpFind->err = 0;
       return TRUE;
    }
 
    lpFind->err = GetLastError();
 
-   Wow64RevertWow64FsRedirection(oldValue);
+   if (pWow64RevertWow64FsRedirection) { pWow64RevertWow64FsRedirection(oldValue); }
    return(FALSE);
 }
 

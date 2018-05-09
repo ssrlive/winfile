@@ -28,11 +28,13 @@ VOID InitLangList(HWND hCBox)
     // Propogate the list
     for (i = 0; i <= (COUNTOF(szLCIDs) - 1); i++)
     {
+        int info = 0;
         TCHAR szLangName[MAX_PATH] = { 0 };
-        LCID lcidTemp = LocaleNameToLCID(szLCIDs[i], 0);
+        LCID lcidTemp = pLocaleNameToLCID ? pLocaleNameToLCID(szLCIDs[i], 0) : 0;
 
         // TODO: need to test this on pre-Vista and on/after Win XP 64
-        if (GetLocaleInfoEx(szLCIDs[i], LOCALE_SLOCALIZEDDISPLAYNAME, szLangName, COUNTOF(szLangName)) == 0)
+        info = pGetLocaleInfoEx ? pGetLocaleInfoEx(szLCIDs[i], LOCALE_SLOCALIZEDDISPLAYNAME, szLangName, COUNTOF(szLangName)) : 0;
+        if (info == 0)
             lstrcpy(szLangName, TEXT("BUGBUG"));
 
         // every entry in the array above needs to be addd to the list box;
